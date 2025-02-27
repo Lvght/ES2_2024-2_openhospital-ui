@@ -33,6 +33,7 @@
     "moment": "^2.29.4",
     "node-fetch": "^2.6.1",
     "numbro": "^2.3.5",
+    "open-hospital": "file:",
     "react": "^18.3.1",
     "react-chartjs-2": "^4.3.1",
     "react-component-export-image": "^1.0.6",
