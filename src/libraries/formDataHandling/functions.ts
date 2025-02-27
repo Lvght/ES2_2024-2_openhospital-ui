@@ -41,7 +41,7 @@ export const getFromFields = (
 
 export const parseDate = (raw: string, withTimezone: boolean = true) => {
   if (raw) {
-    var date = isNaN(+raw) ? new Date(raw) : new Date(+raw);
+    const date = isNaN(+raw) ? new Date(raw) : new Date(+raw);
     if (withTimezone) {
       const timezonedDate = new Date(
         date.getTime() - date.getTimezoneOffset() * 60000
