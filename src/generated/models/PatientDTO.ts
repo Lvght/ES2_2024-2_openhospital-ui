@@ -196,6 +196,8 @@ export interface PatientDTO {
 export enum PatientDTOSexEnum {
   M = "M",
   F = "F",
+  TM = "T",
+  TF = "D"
 }
 /**
  * @export
