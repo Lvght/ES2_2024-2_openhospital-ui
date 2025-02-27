@@ -1,0 +1,7 @@
+Os erros/inconsistencias encontrados via teste de caixa preta manual foram
+#1:
+O campo telefone só pode ser adcionado com especificações para EUA, o que pode ser um problema tanto para pacientes extrangeiros quanto para hospitais localizados em outros países
+#2
+Ao selecionar o Idioma italiano quase todos os termos permanecem emm inglês. O que não ocorre em outros idiomas
+#3
+Não é possível acrescentar suppliers (Fornecedores)
