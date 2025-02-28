@@ -50,7 +50,7 @@ const DischargeForm: FC<DischargeProps> = ({
 
   const renderOptions = (
     data:
-      | (DiseaseDTO | AdmissionTypeDTO | DiseaseTypeDTO | DiseaseDTO)[]
+      | (DiseaseDTO | AdmissionTypeDTO | DiseaseTypeDTO)[]
       | undefined
   ) => {
     if (data) {

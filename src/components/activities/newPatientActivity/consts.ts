@@ -15,6 +15,14 @@ const sexOptions = [
     label: "common.female",
     value: PatientDTOSexEnum.F,
   },
+  {
+    label: "TransFemale",
+    value: PatientDTOSexEnum.TF,
+  },
+  {
+    label: "TransMale",
+    value: PatientDTOSexEnum.TM,
+  },
 ];
 
 const bloodTypeOptions = [
