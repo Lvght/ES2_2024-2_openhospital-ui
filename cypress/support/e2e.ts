@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 
+import '@cypress/code-coverage/support';
 import "cypress-file-upload";
 import permissionList from "../../src/mockServer/fixtures/permissionList";
 

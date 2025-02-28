@@ -1,21 +1,12 @@
 /// <reference types="cypress" />
-// ***********************************************************
-// This example plugins/index.js can be used to load plugins
-//
-// You can change the location of this file or turn off loading
-// the plugins file with the 'pluginsFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/plugins-guide
-// ***********************************************************
 
-// This function is called when a project is opened or re-opened (e.g. due to
-// the project's config changing)
+import codeCoverage from '@cypress/code-coverage/task';
 
 const plugin: Cypress.PluginConfig = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
+  // Adiciona suporte ao código de cobertura
+  codeCoverage(on, config);
 
+  // Configuração para forçar o idioma para inglês nos navegadores
   on("before:browser:launch", (browser, launchOptions) => {
     if (browser.name === "chrome" || browser.name === "firefox") {
       launchOptions.args.push("--lang=en");
@@ -25,6 +16,8 @@ const plugin: Cypress.PluginConfig = (on, config) => {
       return launchOptions;
     }
   });
+
+  return config;
 };
 
 export default plugin;

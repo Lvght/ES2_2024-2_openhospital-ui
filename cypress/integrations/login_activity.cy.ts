@@ -122,4 +122,42 @@ describe("LoginActivity spec", () => {
     //check if the login page is displayed
     cy.dataCy("login-panel");
   });
+
+  //--------------------New Tests--------------------//
+
+  it("should alert the user when the API returns an authentication error", () => {
+    cy.intercept("POST", "/api/login", {
+      statusCode: 401,
+      body: { message: "Invalid credentials" },
+    }).as("loginRequest");
+  
+    cy.byId("username").type("wronguser");
+    cy.byId("password").type("wrongpassword");
+    cy.get(".login__buttonContainer button").click();
+  
+    cy.wait("@loginRequest");
+    cy.dataCy("login-invalid-credentials").should("be.visible");
+  });
+
+  it("should redirect to the dashboard on successful login", () => {
+    cy.byId("username").type("hribeiro");
+    cy.byId("password").type("123456789");
+    cy.get(".login__buttonContainer button").click();
+  
+    cy.url().should("include", "/dashboard"); // Confirma a URL
+    cy.dataCy("dashboard").should("be.visible"); // Confirma que o dashboard está visível
+  });
+
+  it("should log out and return to login page", () => {
+    cy.dataCy("app-header-identified-trigger").then(($trigger) => {
+      if ($trigger.length) {
+        cy.wrap($trigger).click();
+      }
+      cy.byId("signout_icon").click();
+    });
+  
+    cy.get(".dialog__buttonSet .return_button button").click();
+    cy.dataCy("login-panel").should("be.visible");
+  });
+  
 });
