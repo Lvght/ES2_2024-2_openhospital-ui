@@ -6,8 +6,7 @@ ARG OH_API_BRANCH=develop
 ARG API_PORT
 ARG JWT_TOKEN_SECRET
 
-RUN apt-get update
-RUN apt-get install make git -y
+RUN apt-get update && apt-get install make git -y
 
 WORKDIR /
 RUN git clone --depth=1 -b ${OH_API_BRANCH} https://github.com/${GITHUB_ORG}/openhospital-api.git
