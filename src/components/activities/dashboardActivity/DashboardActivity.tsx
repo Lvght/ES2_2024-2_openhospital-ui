@@ -38,8 +38,8 @@ const PatientDashboardActivity: FC<IOwnProps> = ({
 
   const [patients, setPatients] = useState<PatientDTO[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(0);
-  const [size, setSize] = useState<number>(10);
+  const [page] = useState<number>(0);
+  const [size] = useState<number>(10);
 
   useEffect(() => {
     const fetchPatients = async () => {
@@ -50,7 +50,7 @@ const PatientDashboardActivity: FC<IOwnProps> = ({
         const response = await patientsApi.getPatients({ page, size }).toPromise();
         console.log(response);
 
-        if (response && response.data) {
+        if (response?.data) {
           setPatients(response.data);
         }
       } catch (error) {
