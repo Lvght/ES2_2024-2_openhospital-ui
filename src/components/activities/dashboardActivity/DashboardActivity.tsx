@@ -1,5 +1,5 @@
 import { useAppSelector } from "libraries/hooks/redux";
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Navigate } from "react-router";
 import PlusIcon from "../../../assets/PlusIcon";
@@ -7,11 +7,14 @@ import SearchIcon from "../../../assets/SearchIcon";
 import { PATHS } from "../../../consts";
 import { Permission } from "../../../libraries/permissionUtils/Permission";
 import { usePermission } from "../../../libraries/permissionUtils/usePermission";
+import { PatientsApi } from "../../../generated/apis/PatientsApi";
+import { PatientDTO } from "../../../generated/models";
 import AppHeader from "../../accessories/appHeader/AppHeader";
 import Footer from "../../accessories/footer/Footer";
 import LargeButton from "../../accessories/largeButton/LargeButton";
 import "./styles.scss";
 import { IOwnProps, TActivityTransitionState } from "./types";
+import { customConfiguration } from "libraries/apiUtils/configuration";
 
 const PatientDashboardActivity: FC<IOwnProps> = ({
   newPatientRoute,
@@ -31,6 +34,72 @@ const PatientDashboardActivity: FC<IOwnProps> = ({
 
   const [activityTransitionState, setActivityTransitionState] =
     useState<TActivityTransitionState>("IDLE");
+
+  const [patients, setPatients] = useState<PatientDTO[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(0);
+  const [size, setSize] = useState<number>(10);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      setLoading(true);
+      try {
+        const config = customConfiguration();
+        const patientsApi = new PatientsApi(config);
+        const response = await patientsApi.getPatients({ page, size }).toPromise();
+        console.log(response);
+
+        if (response && response.data) {
+          setPatients(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching patients:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPatients();
+  }, [page, size]);
+
+  const renderPatientTable = () => {
+    if (loading) {
+      return <div className="dashboard__patients__loading">{t("common.loading")}</div>;
+    }
+
+    if (patients.length === 0) {
+      return <div className="dashboard__patients__empty">{t("dashboard.noPatients")}</div>;
+    }
+
+    return (
+      <div className="dashboard__patients__table-container">
+        <table className="dashboard__patients__table">
+          <thead>
+            <tr>
+              <th>{t("patient.code")}</th>
+              <th>{t("patient.firstName")}</th>
+              <th>{t("patient.secondName")}</th>
+              <th>{t("patient.birthDate")}</th>
+              <th>{t("patient.sex")}</th>
+              <th>{t("patient.address")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {patients.map((patient) => (
+              <tr key={patient.code}>
+                <td>{patient.code}</td>
+                <td>{patient.firstName}</td>
+                <td>{patient.secondName}</td>
+                <td>{patient.birthDate}</td>
+                <td>{patient.sex}</td>
+                <td>{patient.address}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
 
   switch (activityTransitionState) {
     case "TO_NEW_PATIENT":
@@ -87,6 +156,11 @@ const PatientDashboardActivity: FC<IOwnProps> = ({
                     </div>
                   </LargeButton>
                 </div>
+              </div>
+
+              <div className="dashboard__patients">
+                <h2 className="dashboard__patients__title">{t("dashboard.patientsList")}</h2>
+                {renderPatientTable()}
               </div>
             </Permission>
           </div>
